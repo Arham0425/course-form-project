@@ -1,5 +1,6 @@
 // selection the elements
 const customerForm = document.getElementById('customer-form')
+const feedback = document.querySelector('.feedback')
 const name = document.getElementById('name')
 const course = document.getElementById('course')
 const author = document.getElementById('author')
@@ -15,30 +16,33 @@ let items = [
     }
 ]
 
-// keyup addEventListener
-// name.addEventListener('blur', onBlur())
-// course.addEventListener('blur', onBlur())
-// author.addEventListener('blur', onBlur())
-
 customerForm.addEventListener('submit', event => {
     // prevent the default action
     event.preventDefault()
 
     if (name.value === '' || course.value === '' || author.value === '') {
-        
+        event.target.lastElementChild.disabled = true
     } else {
-        createElements()
+        loading.classList.add('showItem')
+        feedback.classList.add('showItem', 'alert', 'alert-success')
+        // setTimeout(() => {
+            createElements(event)
+        // }, 3000)
+        
     }
 
     // clear input field
     name.value = ''
     course.value = ''
     author.value = ''
-    event.lastElementChild.disabled = true
+    // remove class
+    removeClass()
+    // disable submit button
+    event.target.lastElementChild.disabled = true
 })
 
 // create elements function
-function createElements() {
+function createElements(event) {
     const randomNum = Math.floor(Math.random() * 6)
     let item = {}
     item.id = items.length
@@ -62,14 +66,72 @@ function createElements() {
                 </div>`
     }).join('')
     customerList.innerHTML = mapItem
+    loading.classList.remove('showItem')
+    feedback.classList.remove('showItem')
 }
 
-// input keyup function
-function onBlur() {
+// remove class on the input feild 
+function removeClass() {
+    name.classList.remove('complete')
+    course.classList.remove('complete')
+    author.classList.remove('complete')
+}
+
+// name handle blur
+function nameHandleBlur(event) {
+    // submit button false or true
+    onBlurCondition()
+
+    // add & remove classes
+    const nameBtn = event.target
+    if (nameBtn.value === '') {
+        nameBtn.classList.remove('complete')
+        nameBtn.classList.add('fail')
+    } else {
+        nameBtn.classList.remove('fail')
+        nameBtn.classList.add('complete')
+    }
+}
+
+// course handle blur
+function courseHandleBlur(event) {
+    // submit button false or true
+    onBlurCondition()
+
+    // add & remove classes
+    const courseBtn = event.target
+    if (courseBtn.value === '') {
+        courseBtn.classList.remove('complete')
+        courseBtn.classList.add('fail')
+    } else {
+        courseBtn.classList.remove('fail')
+        courseBtn.classList.add('complete')
+    }
+}
+
+// author handle blur
+function authorHandleBlur(event) {
+    // submit button false or true
+    onBlurCondition()
+
+    // add & remove classes
+    const authorBtn = event.target
+    if (authorBtn.value === '') {
+        authorBtn.classList.remove('complete')
+        authorBtn.classList.add('fail')
+    } else {
+        authorBtn.classList.remove('fail')
+        authorBtn.classList.add('complete')
+    }
+}
+
+// on blur condition
+function onBlurCondition() {
     if (!(name.value === '') && !(course.value === '') && !(author.value === '')) {
         customerForm.lastElementChild.disabled = false
     } else {
         customerForm.lastElementChild.disabled = true
     }
-    // alert(name.value)
 }
+
+
